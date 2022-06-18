@@ -1,3 +1,6 @@
+#Создание системного пользователя.
+sudo adduser --system --no-create-home --group nginx
+
 cname=$(cat /etc/hostname)
 #Генерация сертификата на тестовом УЦ КриптоПро
 /opt/cprocsp/bin/amd64/cryptcp -creatcert -provtype 80 -rdn "CN=$cname" -cont "\\.\HDIMAGE\\$cname" -certusage 1.3.6.1.5.5.7.3.1 -ku -du -both -exprt -ca http://testgost2012.cryptopro.ru/certsrv/ > /tmp/gen.txt
@@ -6,8 +9,6 @@ sudo cp -R /var/opt/cprocsp/keys/$(whoami)/$cname.000 /var/opt/cprocsp/keys/ngin
 sudo chown -R nginx:nginx /var/opt/cprocsp/keys/nginx/$cname.000
   
 #Экспортируем в файл корневой сертификат тестового УЦ КриптоПро из ключевого контейнера: https://testgost2012.cryptopro.ru/certsrv/certnew.cer?ReqID=CACert&Renewal=1&Enc=bin
-#Создание системного пользователя.
-	sudo adduser --system --no-create-home --group nginx
        
 sudo -u nginx /opt/cprocsp/bin/amd64/csptest -keys -cont "\\.\HDIMAGE\$cname" -saveext /tmp/root.p7b > /tmp/rot.txt
 #Установка корневого сертификата
